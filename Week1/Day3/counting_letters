@@ -1,0 +1,12 @@
+def count_letters (string)
+  word_count = {}
+  string.split('').each_with_index do |letters, index|
+    if word_count[letters].nil?
+      word_count[letters] = []
+    end
+    word_count[letters].push(index)
+  end
+  word_count
+end
+
+puts count_letters("This is lighthouse labs.. ")
