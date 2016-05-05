@@ -29,20 +29,20 @@ class Robot
   end
 
   def pick_up(item)
-    if items_weight < 250
+    if item.class.name == "BoxOfBolts"  && @health <= 80
+      item.feed(self)
+    end
+    if (items_weight + item.weight) <= 250
       @items << item
-      if item.is_a?(Weapon)
-        @equipped_weapon = item
-      end
+        if item.is_a?(Weapon)
+          @equipped_weapon = item
+        end
+      true
     end
   end
 
   def items_weight
-    sum=0
-      @items.each do |item|
-       sum+=item.weight
-      end
-    sum
+    @items.inject(0) { |sum, item | sum + item.weight }
   end
 
   def wound(damage_points)
@@ -72,10 +72,22 @@ class Robot
   end
 
   def attack(enemy_robot)
-    if(not :equipped_weapon.nil?)
-      enemy_robot.wound(@weak_attack)
+    if within_range?(enemy_robot, @equipped_weapon.range)
+      if @equipped_weapon == nil
+        enemy_robot.wound(@weak_attack)
+      else
+        @equipped_weapon.hit(enemy_robot)
+        if(@equipped_weapon.reusable == false)
+          @equipped_weapon.pop
+        end
+      end
     end
-    @equipped_weapon.hit(enemy_robot)
+  end
+
+  def within_range?(robot2, range)
+    close_x = (@position[0]+range == robot2.position[0]) || (@position[0]-range == robot2.position[0]) || (@position[0] == robot2.position[0])
+    close_y = (@position[1]+range == robot2.position[1]) || (@position[1]-range == robot2.position[1]) || (@position[1] == robot2.position[1])
+    (close_x && close_y)
   end
 
    def attack!(enemy_robot)

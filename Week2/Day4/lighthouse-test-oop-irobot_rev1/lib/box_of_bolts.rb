@@ -1,3 +1,5 @@
+require 'pry'
+
 class BoxOfBolts < Item
 
   attr_reader :health_points
