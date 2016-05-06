@@ -1,8 +1,8 @@
-require 'pry'
+require_relative 'item'
 
 class BoxOfBolts < Item
 
-  attr_reader :health_points
+  attr_reader :health_points, :weight, :name
 
   def initialize
     @name = "Box of bolts"

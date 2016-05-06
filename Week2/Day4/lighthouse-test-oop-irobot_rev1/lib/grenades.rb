@@ -1,4 +1,4 @@
-class Grenades < Weapon
+class Grenade < Weapon
 
   attr_reader :name, :weight, :damage, :range, :reusable
 

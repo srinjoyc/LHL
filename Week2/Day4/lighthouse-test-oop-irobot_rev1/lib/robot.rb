@@ -1,4 +1,5 @@
 require_relative 'errors'
+require 'pry'
 class Robot
 
   attr_reader :position, :items, :health
@@ -29,7 +30,7 @@ class Robot
   end
 
   def pick_up(item)
-    if item.class.name == "BoxOfBolts"  && @health <= 80
+    if item.is_a?(BoxOfBolts) && health <= 80
       item.feed(self)
     end
     if (items_weight + item.weight) <= 250
@@ -72,22 +73,25 @@ class Robot
   end
 
   def attack(enemy_robot)
-    if within_range?(enemy_robot, @equipped_weapon.range)
       if @equipped_weapon == nil
-        enemy_robot.wound(@weak_attack)
+        if within_range?(enemy_robot, 1)
+          enemy_robot.wound(@weak_attack)
+        end
       else
+        if within_range?(enemy_robot, @equipped_weapon.range)
         @equipped_weapon.hit(enemy_robot)
         if(@equipped_weapon.reusable == false)
-          @equipped_weapon.pop
+          @equipped_weapon = nil
         end
       end
     end
   end
 
-  def within_range?(robot2, range)
-    close_x = (@position[0]+range == robot2.position[0]) || (@position[0]-range == robot2.position[0]) || (@position[0] == robot2.position[0])
-    close_y = (@position[1]+range == robot2.position[1]) || (@position[1]-range == robot2.position[1]) || (@position[1] == robot2.position[1])
-    (close_x && close_y)
+  def within_range?  (robot2,range)
+    delta_x2 = (robot2.position[0]-@position[0]).abs2
+    delta_y2 = (robot2.position[1]-@position[1]).abs2
+    distance = Math.sqrt(delta_x2+delta_y2)
+    distance <= range
   end
 
    def attack!(enemy_robot)
