@@ -1,0 +1,79 @@
+Excersize 1 ------------------------------------------------------------------------
+
+SELECT editions.isbn, books.title, publishers.name
+FROM editions, publishers, books
+WHERE editions.publisher_id = publishers.id AND
+books.id = editions.book_id AND 
+publishers.name = 'Random House';
+
+Excersize 2 ------------------------------------------------------------------------
+
+SELECT editions.isbn, books.title, publishers.name, stock.retail, stock.stock 
+FROM editions, publishers, books, stock 
+WHERE editions.publisher_id = publishers.id AND
+books.id = editions.book_id AND 
+publishers.name = 'Random House' AND 
+stock.isbn = editions.isbn;
+
+Excersize 3 ------------------------------------------------------------------------
+
+SELECT editions.isbn, books.title, publishers.name, stock.retail, stock.stock 
+FROM editions, publishers, books, stock 
+WHERE editions.publisher_id = publishers.id AND
+books.id = editions.book_id AND 
+publishers.name = 'Random House' AND 
+stock.isbn = editions.isbn;
+
+
+Excersize 4 ------------------------------------------------------------------------
+
+SELECT editions.isbn, books.title, publishers.name, stock.retail, stock.stock 
+FROM editions, publishers, books, stock 
+WHERE editions.publisher_id = publishers.id AND
+books.id = editions.book_id AND 
+publishers.name = 'Random House' AND 
+stock.isbn = editions.isbn AND 
+stock.stock > 0;
+
+Excersize 5 ------------------------------------------------------------------------
+
+SELECT editions.isbn, books.title, publishers.name, stock.retail, stock.stock, 
+CASE 
+    WHEN editions.type = 'h' THEN 'hardcover'
+    WHEN editions.type = 'p' THEN 'softcover'
+END AS HS_COVER
+FROM editions, publishers, books, stock 
+WHERE editions.publisher_id = publishers.id AND
+books.id = editions.book_id AND 
+publishers.name = 'Random House' AND 
+stock.isbn = editions.isbn AND 
+stock.stock > 0;
+
+Exersize 6 ------------------------------------------------------------------------
+
+SELECT books.title, editions.publication
+FROM books
+FULL JOIN editions 
+ON books.id = editions.book_id;
+
+Exersize 7 ------------------------------------------------------------------------
+
+SELECT SUM(stock.stock) FROM stock; 
+
+Exersize 8 ------------------------------------------------------------------------
+
+SELECT AVG(stock.cost) as Average_Cost, 
+AVG(stock.retail) AS Average_Retail, 
+AVG(stock.retail-stock.cost) as AVG_Profit
+FROM stock; 
+
+
+Exersize 9 ------------------------------------------------------------------------
+SELECT books.id, editions.isbn, stock.stock
+FROM books
+INNER JOIN editions 
+ON books.id = editions.book_id INNER JOIN stock ON editions.isbn = stock.isbn  
+ORDER BY stock.stock DESC;
+
+Exersize 10 ------------------------------------------------------------------------
+SELECT authors.id, authors.first_name || (' ') || authors.last_name, count(books.title) FROM authors LEFT JOIN books ON (books.author_id=authors.id) GROUP BY authors.id ORDER BY count DESC;
